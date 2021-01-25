@@ -1,0 +1,99 @@
+CREATE TABLE Tavern (
+	TavernID INT IDENTITY(1, 1), 
+	LocationID INT, 
+	Name VARCHAR(250)
+);
+
+CREATE TABLE Supply (
+	SupplyID INT IDENTITY(1, 1),
+Unit VARCHAR(100),
+Name VARCHAR(100),
+Count INT,
+TavernID INT, 
+UpdateDate INT,
+Cost INT,
+AmountReceived INT
+);
+
+ALTER TABLE Tavern ADD PRIMARY KEY TavernID
+ALTER TABLE Supply ADD PRIMARY KEY SupplyID
+ALTER TABLE Supply ADD FOREIGN KEY TavernID REFERENCES Tavern(TavernID)
+
+CREATE TABLE Service (
+	ServiceID INT IDENTITY(1, 1),
+	Name VARCHAR(250),
+	Status VARCHAR(250)
+);
+
+ALTER TABLE Service ADD PRIMARY KEY ServiceID
+
+CREATE TABLE SupplySale (
+	TransactionID INT IDENTITY(1, 1),
+	GuestID INT,
+	SupplyID INT,
+	Price INT,
+	PurchaseDate DATE,
+	Amount DATE,
+	TavernID INT
+);
+
+CREATE TABLE ServiceSale (
+	TransactionID INT IDENTITY(1, 1),
+	GuestID INT,
+	ServiceID INT,
+	Price INT,
+	PurchaseDate DATE,
+	Amount DATE,
+	TavernID INT
+); 
+
+
+CREATE TABLE Guest (
+	GuestID INT IDENTITY(1, 1),
+	Name VARCHAR(250),
+	Notes VARCHAR(max),
+	Birthday DATE,
+	Cakeday DATE,
+	StatusID INT,
+	ClassLevelID INT
+);
+
+ALTER TABLE Guest ADD PRIMARY KEY GuestID
+
+ALTER TABLE SupplySale ADD PRIMARY KEY TransactionID
+ALTER TABLE SupplySale ADD FOREIGN KEY GuestID REFERENCES Guest(GuestID)
+ALTER TABLE SupplySale ADD FOREIGN KEY SupplyID REFERENCES Supply(SupplyID)
+ALTER TABLE SupplySale ADD FOREIGN KEY TavernID REFERENCES Tavern (TavernID)
+
+ALTER TABLE ServiceSale ADD PRIMARY KEY TransactionID
+ALTER TABLE ServiceSale ADD FOREIGN KEY GuestID REFERENCES Guest(GuestID)
+ALTER TABLE ServiceSale ADD FOREIGN KEY SupplyID REFERENCES Supply(SupplyID)
+ALTER TABLE ServiceSale ADD FOREIGN KEY TavernID REFERENCES Tavern (TavernID)
+
+
+CREATE TABLE ClassLevel (
+	ClassLevelID INT IDENTITY(1, 1), 
+	GuestID INT, 
+	ClassID INT,
+	LevelID INT
+); 
+
+CREATE TABLE Class (
+	ClassID INT IDENTITY(1, 1), 
+	Name VARCHAR(50)
+); 
+
+CREATE TABLE Level (
+	LevelID INT IDENTITY(1, 1) 
+); 
+
+CREATE TABLE Status (
+	StatusID INT IDENTITY(1, 1),
+	StatusName VARCHAR(max)
+); 
+
+ALTER TABLE ClassLevel ADD PRIMARY KEY ClassLevelID
+ALTER TABLE ClassLevel ADD FOREIGN KEY GuestID REFERENCES Guest(GuestID) 
+ALTER TABLE ClassLevel ADD FOREIGN KEY ClassID REFERENCES Class(ClassID) 
+ALTER TABLE ClassLevel ADD FOREIGN KEY LevelID REFERENCES Level(LevelID) 
+ALTER TABLE Status ADD PRIMARY KEY StatusID
